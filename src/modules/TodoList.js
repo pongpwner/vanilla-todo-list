@@ -1,7 +1,14 @@
+import Task from "./Task";
+import Project from "./Project";
 const TodoList = (function () {
-  const TODO_LIST = [];
+  const defaultProject = Project("default");
+  const todoList = [defaultProject];
+
   return {
-    todoList: TODO_LIST,
+    todoList,
+    addProject: function (project) {
+      this.todoList.push(project);
+    },
   };
 })();
 
