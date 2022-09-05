@@ -5,12 +5,12 @@ const Project = function (name) {
     tasks,
     name,
     addTask: function (task) {
-      tasks.push(task);
+      this.tasks.push(task);
       console.log(tasks);
     },
     removeTask: function (title) {
-      tasks = tasks.filter((task) => task.title !== title);
-      console.log(tasks);
+      this.tasks = this.tasks.filter((task) => task.title !== title);
+      console.log(this);
     },
   };
 };

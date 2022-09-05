@@ -74,8 +74,9 @@ const UI = (function () {
     console.log(TodoList.todoList[0]);
     TodoList.todoList[0].addTask(newTask);
     TODO_FORM.reset();
+    removeAllChildNodes(TODO_LIST);
     addTaskToUI();
-    console.log(TodoList.todoList[0].tasks);
+    console.log(TodoList.todoList[0]);
   });
   TODO_FORM.appendChild(SUBMIT);
 
@@ -87,7 +88,7 @@ const UI = (function () {
   //helper functions
   function addTaskToUI() {
     //updates dom
-    removeAllChildNodes(TODO_LIST);
+
     TodoList.todoList[0].tasks.forEach((task) => {
       let li = document.createElement("li");
       li.textContent = task.title;
@@ -99,6 +100,7 @@ const UI = (function () {
       removeButton.addEventListener("click", () => {
         //fix
         TodoList.todoList[0].removeTask(task.title);
+        removeAllChildNodes(TODO_LIST);
         addTaskToUI();
       });
     });
