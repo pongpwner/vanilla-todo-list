@@ -19,7 +19,7 @@ const UI = (function () {
 
   const LI1 = document.createElement("li");
   const LABEL1 = document.createElement("label");
-  LABEL1.for = "title";
+  LABEL1.setAttribute("for", "title");
   LABEL1.textContent = "title:";
   const INPUT1 = document.createElement("input");
   INPUT1.setAttribute("id", "title");
@@ -29,7 +29,7 @@ const UI = (function () {
 
   const LI2 = document.createElement("li");
   const LABEL2 = document.createElement("label");
-  LABEL2.for = "description";
+  LABEL2.setAttribute("for", "desription");
   LABEL2.textContent = "description:";
   const INPUT2 = document.createElement("input");
   INPUT2.setAttribute("id", "desription");
@@ -39,7 +39,7 @@ const UI = (function () {
 
   const LI3 = document.createElement("li");
   const LABEL3 = document.createElement("label");
-  LABEL3.for = "due-date";
+  LABEL3.setAttribute("for", "due-date");
   LABEL3.textContent = "due date:";
   const INPUT3 = document.createElement("input");
   INPUT3.setAttribute("id", "due-date");
@@ -49,7 +49,7 @@ const UI = (function () {
 
   const LI4 = document.createElement("li");
   const LABEL4 = document.createElement("label");
-  LABEL4.for = "priority";
+  LABEL4.setAttribute("for", "priority");
   LABEL4.textContent = "priority:";
   const INPUT4 = document.createElement("input");
   INPUT4.setAttribute("id", "priority");
@@ -68,6 +68,7 @@ const UI = (function () {
   SUBMIT.type = "buton";
   SUBMIT.textContent = "Submit";
   SUBMIT.addEventListener("click", (event) => {
+    //append tasks to the dom
     event.preventDefault();
     let newTask = Task(INPUT1.value, INPUT2.value, INPUT3.value, INPUT4.value);
     //
@@ -83,9 +84,38 @@ const UI = (function () {
   const TODO_LIST = document.createElement("ul");
   TODO_LIST.classList.add("todo-list");
 
-  //todo get todo list and append tasks to the list
+  //Project form
+  const PROJECT_FORM = document.createElement("form");
+  PROJECT_FORM.classList.add("project-form");
 
+  const PROJECT_FORM_TITLE = document.createElement("h1");
+  PROJECT_FORM_TITLE.textContent = "New Project";
+  PROJECT_FORM.appendChild(PROJECT_FORM_TITLE);
+  const PROJECT_FORM_SECTION = document.createElement("div");
+  PROJECT_FORM_SECTION.classList.add("form-section");
+  PROJECT_FORM.appendChild(PROJECT_FORM_SECTION);
+
+  PROJECT_FORM_SECTION;
+
+  const PROJECT_FORM_LABEL = document.createElement("label");
+  PROJECT_FORM_LABEL.textContent = "Project Name:";
+  PROJECT_FORM_LABEL.setAttribute("for", "project-name");
+  const PROJECT_FORM_INPUT = document.createElement("input");
+  PROJECT_FORM_INPUT.setAttribute("id", "project-name");
+
+  const PROJECT_SUBMIT = document.createElement("button");
+  PROJECT_SUBMIT.type = "buton";
+  PROJECT_SUBMIT.textContent = "Submit";
+
+  PROJECT_FORM_SECTION.appendChild(PROJECT_FORM_LABEL);
+  PROJECT_FORM_SECTION.appendChild(PROJECT_FORM_INPUT);
+  PROJECT_FORM_SECTION.appendChild(PROJECT_SUBMIT);
+  //
   //helper functions
+
+  //add tasks to ui
+
+  //todo add which project to the parameter
   function addTaskToUI() {
     //updates dom
 
@@ -116,6 +146,7 @@ const UI = (function () {
     loadUI: function () {
       PAGE_CONTENT.appendChild(TODO_FORM);
       PAGE_CONTENT.appendChild(TODO_LIST);
+      PAGE_CONTENT.appendChild(PROJECT_FORM);
     },
   };
 })();
