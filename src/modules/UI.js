@@ -3,7 +3,7 @@ import TodoList from "./TodoList";
 import Task from "./Task";
 import Project from "./Project";
 import Controller from "./Controller";
-import { CleanPlugin } from "webpack";
+
 //import TodoList from "./TodoList";
 const UI = (function () {
   let currentProject = TodoList.todoList[0];
@@ -76,13 +76,12 @@ const UI = (function () {
     let newTask = Task(INPUT1.value, INPUT2.value, INPUT3.value, INPUT4.value);
     //
     console.log(TodoList.todoList[0]);
-    TodoList.todoList[0].addTask(newTask);
+    currentProject.addTask(newTask);
     TODO_FORM.reset();
     removeAllChildNodes(TODO_LIST);
 
     addTaskToUI(currentProject);
     //console.log(TodoList.todoList[0]);
-    console.log(currentProject.name);
   });
   TODO_FORM.appendChild(SUBMIT);
 
@@ -117,8 +116,9 @@ const UI = (function () {
   const PROJECT_SUBMIT = document.createElement("button");
   PROJECT_SUBMIT.type = "buton";
   PROJECT_SUBMIT.textContent = "Submit";
-  //todo add event listener to add project
+
   PROJECT_SUBMIT.addEventListener("click", (event) => {
+    //add project to dom
     event.preventDefault();
     let newProject = Project(PROJECT_FORM_INPUT.value);
     TodoList.addProject(newProject);
@@ -141,6 +141,13 @@ const UI = (function () {
     TodoList.todoList.forEach((project) => {
       let li = document.createElement("li");
       li.textContent = project.name;
+      li.addEventListener("click", () => {
+        currentProject = project;
+        CURRENT_PROJECT_NAME.textContent = currentProject.name;
+        removeAllChildNodes(TODO_LIST);
+        addTaskToUI(currentProject);
+        console.log(currentProject);
+      });
       PROJECT_LIST.appendChild(li);
 
       let removeButton = document.createElement("button");
@@ -161,6 +168,7 @@ const UI = (function () {
   function addTaskToUI(project) {
     //updates dom
     //TodoList.todoList[0]
+    TODO_LIST.appendChild(CURRENT_PROJECT_NAME);
     project.tasks.forEach((task) => {
       let li = document.createElement("li");
       li.textContent = task.title;
@@ -173,7 +181,7 @@ const UI = (function () {
         //fix
         project.removeTask(task.title);
         removeAllChildNodes(TODO_LIST);
-        addTaskToUI();
+        addTaskToUI(currentProject);
       });
     });
   }
