@@ -46,7 +46,7 @@ const UI = (function () {
   LABEL3.textContent = "due date:";
   const INPUT3 = document.createElement("input");
   INPUT3.setAttribute("id", "due-date");
-  INPUT3.type = "text";
+  INPUT3.type = "date";
   LI3.appendChild(LABEL3);
   LI3.appendChild(INPUT3);
 
@@ -54,11 +54,28 @@ const UI = (function () {
   const LABEL4 = document.createElement("label");
   LABEL4.setAttribute("for", "priority");
   LABEL4.textContent = "priority:";
-  const INPUT4 = document.createElement("input");
-  INPUT4.setAttribute("id", "priority");
-  INPUT4.type = "text";
+  const RADIO_LOW = document.createElement("input");
+  const RADIO_HIGH = document.createElement("input");
+  RADIO_LOW.setAttribute("id", "low");
+  RADIO_HIGH.setAttribute("id", "high");
+  const LOW_LABEL = document.createElement("label");
+  LOW_LABEL.textContent = "low:";
+  const HIGH_LABEL = document.createElement("label");
+  HIGH_LABEL.textContent = "high";
+  LOW_LABEL.setAttribute("for", "low");
+  HIGH_LABEL.setAttribute("for", "high");
+  RADIO_LOW.type = "radio";
+  RADIO_LOW.value = "low";
+  RADIO_LOW.name = "priority";
+  RADIO_HIGH.type = "radio";
+  RADIO_HIGH.name = "priority";
+  RADIO_HIGH.value = "high";
+  //RADIO_LOW.checked = true;
   LI4.appendChild(LABEL4);
-  LI4.appendChild(INPUT4);
+  LI4.appendChild(LOW_LABEL);
+  LI4.appendChild(RADIO_LOW);
+  LI4.appendChild(HIGH_LABEL);
+  LI4.appendChild(RADIO_HIGH);
 
   //append li to ul tasklist
   FORM_SECTION.appendChild(LI1);
@@ -73,7 +90,18 @@ const UI = (function () {
   SUBMIT.addEventListener("click", (event) => {
     //append tasks to the dom
     event.preventDefault();
-    let newTask = Task(INPUT1.value, INPUT2.value, INPUT3.value, INPUT4.value);
+    let priorityValue;
+    let radios = document.getElementsByName("priority");
+    for (let i = 0, length = radios.length; i < length; i++) {
+      if (radios[i].checked) {
+        // do whatever you want with the checked radio
+        priorityValue = radios[i].value;
+
+        // only one radio can be logically checked, don't check the rest
+        break;
+      }
+    }
+    let newTask = Task(INPUT1.value, INPUT2.value, INPUT3.value, priorityValue);
     //
     console.log(TodoList.todoList[0]);
     currentProject.addTask(newTask);
@@ -171,8 +199,20 @@ const UI = (function () {
     TODO_LIST.appendChild(CURRENT_PROJECT_NAME);
     project.tasks.forEach((task) => {
       let li = document.createElement("li");
-      li.textContent = task.title;
+
       TODO_LIST.appendChild(li);
+      let title = document.createElement("div");
+      title.textContent = task.title;
+      let description = document.createElement("div");
+      description.textContent = task.description;
+      let date = document.createElement("div");
+      date.textContent = task.dueDate;
+      let priority = document.createElement("div");
+      priority.textContent = task.priority;
+      li.appendChild(title);
+      li.appendChild(description);
+      li.appendChild(date);
+      li.appendChild(priority);
 
       let removeButton = document.createElement("button");
       removeButton.textContent = "remove";
