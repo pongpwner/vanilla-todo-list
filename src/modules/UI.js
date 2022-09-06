@@ -3,8 +3,11 @@ import TodoList from "./TodoList";
 import Task from "./Task";
 import Project from "./Project";
 import Controller from "./Controller";
+import { CleanPlugin } from "webpack";
 //import TodoList from "./TodoList";
 const UI = (function () {
+  let currentProject = TodoList.todoList[0];
+
   const PAGE_CONTENT = document.querySelector("#content");
   //todo create form
   const TODO_FORM = document.createElement("form");
@@ -76,13 +79,20 @@ const UI = (function () {
     TodoList.todoList[0].addTask(newTask);
     TODO_FORM.reset();
     removeAllChildNodes(TODO_LIST);
-    addTaskToUI();
-    console.log(TodoList.todoList[0]);
+
+    addTaskToUI(currentProject);
+    //console.log(TodoList.todoList[0]);
+    console.log(currentProject.name);
   });
   TODO_FORM.appendChild(SUBMIT);
 
   const TODO_LIST = document.createElement("ul");
+
   TODO_LIST.classList.add("todo-list");
+
+  const CURRENT_PROJECT_NAME = document.createElement("h1");
+  CURRENT_PROJECT_NAME.textContent = currentProject.name;
+  TODO_LIST.appendChild(CURRENT_PROJECT_NAME);
 
   //Project form
   const PROJECT_FORM = document.createElement("form");
@@ -108,7 +118,7 @@ const UI = (function () {
   PROJECT_SUBMIT.type = "buton";
   PROJECT_SUBMIT.textContent = "Submit";
   //todo add event listener to add project
-  PROJECT_SUBMIT.addEventListener("click", () => {
+  PROJECT_SUBMIT.addEventListener("click", (event) => {
     event.preventDefault();
     let newProject = Project(PROJECT_FORM_INPUT.value);
     TodoList.addProject(newProject);
@@ -148,10 +158,10 @@ const UI = (function () {
 
   //add tasks to ui
   //todo add which project to the parameter
-  function addTaskToUI() {
+  function addTaskToUI(project) {
     //updates dom
-
-    TodoList.todoList[0].tasks.forEach((task) => {
+    //TodoList.todoList[0]
+    project.tasks.forEach((task) => {
       let li = document.createElement("li");
       li.textContent = task.title;
       TODO_LIST.appendChild(li);
@@ -161,7 +171,7 @@ const UI = (function () {
       li.appendChild(removeButton);
       removeButton.addEventListener("click", () => {
         //fix
-        TodoList.todoList[0].removeTask(task.title);
+        project.removeTask(task.title);
         removeAllChildNodes(TODO_LIST);
         addTaskToUI();
       });
