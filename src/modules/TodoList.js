@@ -9,6 +9,11 @@ const TodoList = (function () {
     addProject: function (project) {
       this.todoList.push(project);
     },
+
+    removeProject: function (name) {
+      this.todoList = this.todoList.filter((project) => project.name !== name);
+      console.log(this);
+    },
   };
 })();
 

@@ -101,20 +101,52 @@ const UI = (function () {
   PROJECT_FORM_LABEL.textContent = "Project Name:";
   PROJECT_FORM_LABEL.setAttribute("for", "project-name");
   const PROJECT_FORM_INPUT = document.createElement("input");
+  PROJECT_FORM_INPUT.type = "text";
   PROJECT_FORM_INPUT.setAttribute("id", "project-name");
 
   const PROJECT_SUBMIT = document.createElement("button");
   PROJECT_SUBMIT.type = "buton";
   PROJECT_SUBMIT.textContent = "Submit";
+  //todo add event listener to add project
+  PROJECT_SUBMIT.addEventListener("click", () => {
+    event.preventDefault();
+    let newProject = Project(PROJECT_FORM_INPUT.value);
+    TodoList.addProject(newProject);
+    removeAllChildNodes(PROJECT_LIST);
+    addProjectToUI();
+    PROJECT_FORM.reset();
+  });
 
   PROJECT_FORM_SECTION.appendChild(PROJECT_FORM_LABEL);
   PROJECT_FORM_SECTION.appendChild(PROJECT_FORM_INPUT);
   PROJECT_FORM_SECTION.appendChild(PROJECT_SUBMIT);
-  //
+
+  //project list
+
+  const PROJECT_LIST = document.createElement("ul");
   //helper functions
 
-  //add tasks to ui
+  //add projects to ui
+  function addProjectToUI() {
+    TodoList.todoList.forEach((project) => {
+      let li = document.createElement("li");
+      li.textContent = project.name;
+      PROJECT_LIST.appendChild(li);
 
+      let removeButton = document.createElement("button");
+      removeButton.textContent = "remove";
+      li.appendChild(removeButton);
+      removeButton.addEventListener("click", () => {
+        //TODO
+        //fix
+        TodoList.removeProject(project.name);
+        removeAllChildNodes(PROJECT_LIST);
+        addProjectToUI();
+      });
+    });
+  }
+
+  //add tasks to ui
   //todo add which project to the parameter
   function addTaskToUI() {
     //updates dom
@@ -147,6 +179,8 @@ const UI = (function () {
       PAGE_CONTENT.appendChild(TODO_FORM);
       PAGE_CONTENT.appendChild(TODO_LIST);
       PAGE_CONTENT.appendChild(PROJECT_FORM);
+      PAGE_CONTENT.appendChild(PROJECT_LIST);
+      addProjectToUI();
     },
   };
 })();
