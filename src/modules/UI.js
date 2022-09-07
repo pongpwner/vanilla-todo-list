@@ -199,18 +199,28 @@ const UI = (function () {
     TODO_LIST.appendChild(CURRENT_PROJECT_NAME);
     project.tasks.forEach((task) => {
       let li = document.createElement("li");
-
+      function toggleTaskDescription() {
+        //let taskDescription = document.querySelector(".description");
+        //console.log(taskDescription);
+        if (li.contains(description)) {
+          li.removeChild(description);
+        } else {
+          li.appendChild(description);
+        }
+      }
+      li.addEventListener("click", () => toggleTaskDescription());
       TODO_LIST.appendChild(li);
       let title = document.createElement("div");
       title.textContent = task.title;
       let description = document.createElement("div");
       description.textContent = task.description;
+      description.classList.add("description");
       let date = document.createElement("div");
       date.textContent = task.dueDate;
       let priority = document.createElement("div");
       priority.textContent = task.priority;
       li.appendChild(title);
-      li.appendChild(description);
+      //li.appendChild(description);
       li.appendChild(date);
       li.appendChild(priority);
 
