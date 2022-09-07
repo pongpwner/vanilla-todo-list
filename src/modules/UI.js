@@ -162,6 +162,7 @@ const UI = (function () {
   //project list
 
   const PROJECT_LIST = document.createElement("ul");
+  PROJECT_LIST.classList.add("project-list");
   //helper functions
 
   //add projects to ui
