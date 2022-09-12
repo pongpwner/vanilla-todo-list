@@ -3,6 +3,7 @@ import TodoList from "./TodoList";
 import Task from "./Task";
 import Project from "./Project";
 import Controller from "./Controller";
+import Storage from "./storage";
 
 //import TodoList from "./TodoList";
 const UI = (function () {
@@ -103,7 +104,8 @@ const UI = (function () {
     }
     let newTask = Task(INPUT1.value, INPUT2.value, INPUT3.value, priorityValue);
     //
-    console.log(TodoList.todoList[0]);
+    //console.log(TodoList.todoList[0]);
+    console.log(currentProject);
     currentProject.addTask(newTask);
     TODO_FORM.reset();
     removeAllChildNodes(TODO_LIST);
@@ -118,7 +120,7 @@ const UI = (function () {
   TODO_LIST.classList.add("todo-list");
 
   const CURRENT_PROJECT_NAME = document.createElement("h1");
-  CURRENT_PROJECT_NAME.textContent = currentProject.name;
+  CURRENT_PROJECT_NAME.textContent = currentProject ? currentProject.name : "";
   TODO_LIST.appendChild(CURRENT_PROJECT_NAME);
 
   //Project form
@@ -149,10 +151,12 @@ const UI = (function () {
     //add project to dom
     event.preventDefault();
     let newProject = Project(PROJECT_FORM_INPUT.value);
+    console.log(newProject);
     TodoList.addProject(newProject);
     removeAllChildNodes(PROJECT_LIST);
     addProjectToUI();
     PROJECT_FORM.reset();
+    console.log(TodoList.todoList);
   });
 
   PROJECT_FORM_SECTION.appendChild(PROJECT_FORM_LABEL);
@@ -167,29 +171,32 @@ const UI = (function () {
 
   //add projects to ui
   function addProjectToUI() {
-    TodoList.todoList.forEach((project) => {
-      let li = document.createElement("li");
-      li.textContent = project.name;
-      li.addEventListener("click", () => {
-        currentProject = project;
-        CURRENT_PROJECT_NAME.textContent = currentProject.name;
-        removeAllChildNodes(TODO_LIST);
-        addTaskToUI(currentProject);
-        console.log(currentProject);
-      });
-      PROJECT_LIST.appendChild(li);
+    if (TodoList.todoList) {
+      console.log(TodoList.todoList);
+      TodoList.todoList.forEach((project) => {
+        let li = document.createElement("li");
+        li.textContent = project.name;
+        li.addEventListener("click", () => {
+          currentProject = project;
+          CURRENT_PROJECT_NAME.textContent = currentProject.name;
+          removeAllChildNodes(TODO_LIST);
+          addTaskToUI(currentProject);
+          console.log(currentProject);
+        });
+        PROJECT_LIST.appendChild(li);
 
-      let removeButton = document.createElement("button");
-      removeButton.textContent = "remove";
-      li.appendChild(removeButton);
-      removeButton.addEventListener("click", () => {
-        //TODO
-        //fix
-        TodoList.removeProject(project.name);
-        removeAllChildNodes(PROJECT_LIST);
-        addProjectToUI();
+        let removeButton = document.createElement("button");
+        removeButton.textContent = "remove";
+        li.appendChild(removeButton);
+        removeButton.addEventListener("click", () => {
+          //TODO
+          //fix
+          TodoList.removeProject(project.name);
+          removeAllChildNodes(PROJECT_LIST);
+          addProjectToUI();
+        });
       });
-    });
+    }
   }
 
   //add tasks to ui
@@ -245,11 +252,16 @@ const UI = (function () {
 
   return {
     loadUI: function () {
+      TodoList.todoList = Storage.getTodoList();
+      console.log(TODO_LIST.todoList);
+      console.log(currentProject);
       PAGE_CONTENT.appendChild(TODO_FORM);
       PAGE_CONTENT.appendChild(TODO_LIST);
       PAGE_CONTENT.appendChild(PROJECT_FORM);
       PAGE_CONTENT.appendChild(PROJECT_LIST);
+
       addProjectToUI();
+      addTaskToUI(currentProject);
     },
   };
 })();
